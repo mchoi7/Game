@@ -2,31 +2,48 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Controller extends KeyAdapter {
-    private int[] keysTimer = new int[256];
-    private boolean[] keys = new boolean[256];
+    private boolean[] key = new boolean[256];
+    private int[] keyPress = new int[256];
+    private boolean[] keyDoubleTap = new boolean[256];
 
     public void update() {
-        for(int i = 0; i < keys.length; i++)
-            keysTimer[i]--;
+        for(int i = 0; i < key.length; i++) {
+            keyPress[i]--;
+        }
     }
 
     public void keyPressed(KeyEvent e) {
-        if(!keys[e.getExtendedKeyCode()]) {
-            keysTimer[e.getExtendedKeyCode()] = 0;
-            keys[e.getExtendedKeyCode()] = true;
+        int code = e.getExtendedKeyCode();
+        if(keyPress[code] > 0) {
+            keyDoubleTap[code] = true;
         }
-        if(e.getExtendedKeyCode() == 27) System.exit(1);
+        if(!key[code])
+            keyPress[code] = 10;
+        key[code] = true;
+
+        if(code == 27) System.exit(1);
     }
 
     public void keyReleased(KeyEvent e) {
-        keys[e.getExtendedKeyCode()] = false;
+        int code = e.getExtendedKeyCode();
+
+        keyDoubleTap[code] = false;
+        key[code] = false;
     }
 
-    public boolean getKey(int index) {
-        return keys[index];
+    public boolean getKey(int i) {
+        return key[i];
     }
 
-    public int getKeyTimer(int index) {
-        return keysTimer[index];
+    public int getKeyPress(int i) {
+        return keyPress[i];
+    }
+
+    public boolean getKeyDoubleTap(int i) {
+        return keyDoubleTap[i];
+    }
+
+    public void setKeyDoubleTap(int i, boolean state) {
+        keyDoubleTap[i] = state;
     }
 }

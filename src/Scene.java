@@ -19,11 +19,14 @@ public class Scene {
 
     public void update() {
         actors.forEach(Updatable::update);
-        actors.forEach(actor -> actor.process(blocks));
     }
 
     public void render(Graphics g) {
         actors.forEach(actor -> actor.render(g));
         blocks.forEach(block -> block.render(g));
+    }
+
+    public List<Block> getBlocks() {
+        return blocks;
     }
 }
